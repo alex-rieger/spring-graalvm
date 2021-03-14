@@ -1,0 +1,47 @@
+plugins {
+	id 'org.springframework.boot' version '2.4.2'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id 'java'
+	id 'com.github.ayltai.spring-graalvm-native-plugin' version '1.4.2'
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'io.projectreactor:reactor-test'
+	// https://mvnrepository.com/artifact/org.graalvm.js/js
+	compile group: 'org.graalvm.js', name: 'js', version: '21.0.0'
+	// https://mvnrepository.com/artifact/org.springframework.experimental/spring-graal-native
+	compile group: 'org.springframework.experimental', name: 'spring-graal-native', version: '0.6.1.RELEASE'
+	// https://mvnrepository.com/artifact/org.graalvm.js/js
+	compile group: 'org.graalvm.js', name: 'js', version: '21.0.0'
+}
+
+test {
+	useJUnitPlatform()
+}
+
+nativeImage {
+    mainClassName = 'com.example.demo.DemoApplication'
+	javaVersion                = 11
+    reportExceptionStackTraces = true
+    removeUnusedAutoConfig     = true
+    removeYamlSupport          = true
+    maxHeapSize                = '6G'
+}
